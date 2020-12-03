@@ -1,0 +1,24 @@
+use anyhow::{bail, Result};
+use clap::{App, Arg};
+
+mod day1;
+mod day2;
+mod day3;
+
+fn main() -> Result<()> {
+    let matches = App::new("advent-of-code-2020")
+        .arg(Arg::with_name("day").required(true))
+        .get_matches();
+
+    let day_str = matches.value_of("day").unwrap();
+    let day: u32 = day_str.parse()?;
+
+    match day {
+        1 => day1::solve(),
+        2 => day2::solve(),
+        3 => day3::solve(),
+        _ => bail!("I haven't solved that day yet!"),
+    };
+
+    Ok(())
+}
