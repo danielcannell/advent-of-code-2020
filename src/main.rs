@@ -4,6 +4,7 @@ use clap::{App, Arg};
 mod day1;
 mod day2;
 mod day3;
+mod day4;
 
 fn main() -> Result<()> {
     let matches = App::new("advent-of-code-2020")
@@ -17,6 +18,7 @@ fn main() -> Result<()> {
         1 => day1::solve(),
         2 => day2::solve(),
         3 => day3::solve(),
+        4 => day4::solve(),
         _ => bail!("I haven't solved that day yet!"),
     };
 
