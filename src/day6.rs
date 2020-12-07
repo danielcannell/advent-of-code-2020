@@ -23,10 +23,10 @@ fn part1(groups: &[Vec<HashSet<char>>]) -> usize {
     let mut count = 0;
 
     for g in groups {
-        let mut qs = HashSet::new();
+        let mut qs: HashSet<char> = HashSet::new();
 
         for p in g {
-            qs = qs.union(p).cloned().collect();
+            qs.extend(p);
         }
 
         count += qs.len();
