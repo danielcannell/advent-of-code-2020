@@ -46,7 +46,6 @@ struct Edge {
 
 #[derive(Debug)]
 struct Graph {
-    next_node_id: NodeID,
     nodes: HashMap<String, NodeID>,
     edges: Vec<Edge>,
 }
@@ -57,7 +56,6 @@ impl Graph {
         let inner_re = Regex::new(r"(\d+) (\w+ \w+) bag").unwrap();
 
         let mut graph = Graph {
-            next_node_id: 0,
             nodes: HashMap::new(),
             edges: Vec::new(),
         };
@@ -77,12 +75,8 @@ impl Graph {
     }
 
     fn insert_node(&mut self, node: &str) -> NodeID {
-        if !self.nodes.contains_key(node) {
-            self.nodes.insert(node.to_string(), self.next_node_id);
-            self.next_node_id += 1;
-        }
-
-        *self.nodes.get(node).unwrap()
+        let next_node_id = self.nodes.len() as u32;
+        *self.nodes.entry(node.to_string()).or_insert(next_node_id)
     }
 
     fn node(&self, node: &str) -> NodeID {
