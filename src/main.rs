@@ -9,6 +9,7 @@ mod day5;
 mod day6;
 mod day7;
 mod day8;
+mod day9;
 
 fn main() -> Result<()> {
     let matches = App::new("advent-of-code-2020")
@@ -27,6 +28,7 @@ fn main() -> Result<()> {
         6 => day6::solve(),
         7 => day7::solve(),
         8 => day8::solve(),
+        9 => day9::solve(),
         _ => bail!("I haven't solved that day yet!"),
     };
 

@@ -1,6 +1,6 @@
-use std::str::FromStr;
-use std::collections::HashSet;
 use anyhow::{anyhow, bail, Error};
+use std::collections::HashSet;
+use std::str::FromStr;
 
 pub fn solve() {
     let input: Vec<Instr> = include_str!("../input/day8")
@@ -41,8 +41,7 @@ fn part2(program: &[Instr]) -> i32 {
                 }
             }
 
-            Instr::Acc(_) => {
-            }
+            Instr::Acc(_) => {}
         }
     }
 
