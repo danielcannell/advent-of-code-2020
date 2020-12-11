@@ -3,6 +3,7 @@ use clap::{App, Arg};
 
 mod day1;
 mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -31,6 +32,7 @@ fn main() -> Result<()> {
         8 => day8::solve(),
         9 => day9::solve(),
         10 => day10::solve(),
+        11 => day11::solve(),
         _ => bail!("I haven't solved that day yet!"),
     };
 
