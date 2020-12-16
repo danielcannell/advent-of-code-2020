@@ -7,6 +7,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fromstr_derive",
+ "lazy_static",
  "regex",
 ]
 
