@@ -23,24 +23,29 @@ fn part1(notes: &Notes) -> u32 {
 }
 
 fn part2(notes: &Notes) -> u64 {
-    let tickets: Vec<Vec<u32>> = notes.nearby_tickets.iter().filter(|&ticket| {
-        for &v in ticket {
-            let mut any_valid = false;
+    let tickets: Vec<Vec<u32>> = notes
+        .nearby_tickets
+        .iter()
+        .filter(|&ticket| {
+            for &v in ticket {
+                let mut any_valid = false;
 
-            for f in &notes.fields {
-                if f.is_valid(v) {
-                    any_valid = true;
-                    break;
+                for f in &notes.fields {
+                    if f.is_valid(v) {
+                        any_valid = true;
+                        break;
+                    }
+                }
+
+                if !any_valid {
+                    return false;
                 }
             }
 
-            if !any_valid {
-                return false;
-            }
-        }
-
-        true
-    }).cloned().collect();
+            true
+        })
+        .cloned()
+        .collect();
 
     let mut columns: Vec<Vec<u32>> = vec![Vec::new(); notes.fields.len()];
     for t in &tickets {
