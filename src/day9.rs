@@ -37,9 +37,7 @@ fn part2(input: &[i64]) -> i64 {
 fn find_first_invalid(input: &[i64]) -> i64 {
     let mut window = [0; 25];
 
-    for i in 0..25 {
-        window[i] = input[i];
-    }
+    window[..25].copy_from_slice(&input[..25]);
 
     for i in 25..input.len() {
         let num = input[i];

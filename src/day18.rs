@@ -124,12 +124,12 @@ fn parse_atom(tokens: &[Token], pos: &mut usize, get_prec: fn(BinOp) -> u32) -> 
             *pos += 1;
             let e = parse_expr(tokens, pos, 0, get_prec);
             *pos += 1;
-            return e;
+            e
         }
 
         Some(Token::Literal(value)) => {
             *pos += 1;
-            return Expr::Literal { value: *value };
+            Expr::Literal { value: *value }
         }
 
         _ => {

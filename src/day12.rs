@@ -76,7 +76,7 @@ impl FromStr for Move {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Move, Error> {
-        if s.len() == 0 {
+        if s.is_empty() {
             bail!("Empty move");
         }
 

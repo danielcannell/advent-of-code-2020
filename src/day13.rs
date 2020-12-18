@@ -1,11 +1,11 @@
 pub fn solve() {
     let input = include_str!("../input/day13");
-    let earliest: u64 = input.lines().nth(0).unwrap().parse().unwrap();
+    let earliest: u64 = input.lines().next().unwrap().parse().unwrap();
     let busses: Vec<Option<u64>> = input
         .lines()
         .nth(1)
         .unwrap()
-        .split(",")
+        .split(',')
         .map(|s| {
             if s == "x" {
                 None

@@ -53,7 +53,7 @@ struct Grid {
 impl Grid {
     fn from_str(s: &str) -> Grid {
         let height = s.lines().count();
-        let width = s.lines().nth(0).unwrap().len();
+        let width = s.lines().next().unwrap().len();
         let squares: Vec<Square> = s.chars().filter_map(Square::from_char).collect();
 
         Grid {

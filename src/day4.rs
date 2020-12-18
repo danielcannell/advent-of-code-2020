@@ -90,7 +90,7 @@ pub fn parse_passports(input: &str) -> Vec<Passport> {
     let re = Regex::new(r"(\w+):([^ ]+)").unwrap();
 
     for line in input.lines() {
-        if line.trim().len() == 0 {
+        if line.trim().is_empty() {
             passports.push(p);
             p = HashMap::new();
         } else {

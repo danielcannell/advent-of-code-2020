@@ -22,7 +22,7 @@ fn part2(program: &[Instr]) -> i32 {
 
         match instr {
             Instr::Jmp(v) => {
-                let mut new_program: Vec<Instr> = program.iter().cloned().collect();
+                let mut new_program = program.to_vec();
                 new_program[i] = Instr::Nop(v);
                 let (success, acc) = execute(&new_program);
 
@@ -32,7 +32,7 @@ fn part2(program: &[Instr]) -> i32 {
             }
 
             Instr::Nop(v) => {
-                let mut new_program: Vec<Instr> = program.iter().cloned().collect();
+                let mut new_program = program.to_vec();
                 new_program[i] = Instr::Jmp(v);
                 let (success, acc) = execute(&new_program);
 
@@ -92,9 +92,12 @@ impl FromStr for Instr {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut parts = s.split(" ");
-        let opcode = parts.next().ok_or(anyhow!("Invalid input"))?;
-        let value: i32 = parts.next().ok_or(anyhow!("Invalid input"))?.parse()?;
+        let mut parts = s.split(' ');
+        let opcode = parts.next().ok_or_else(|| anyhow!("Invalid input"))?;
+        let value: i32 = parts
+            .next()
+            .ok_or_else(|| anyhow!("Invalid input"))?
+            .parse()?;
 
         let instr = match opcode {
             "jmp" => Instr::Jmp(value),

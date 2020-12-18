@@ -47,9 +47,9 @@ fn part2(adaptors: &[u64]) -> u64 {
 }
 
 fn joltages_from_adaptors(adaptors: &[u64]) -> Vec<u64> {
-    let mut joltages: Vec<u64> = adaptors.iter().cloned().collect();
+    let mut joltages = adaptors.to_vec();
     joltages.push(0); // Socket
     joltages.push(joltages.iter().max().unwrap() + 3); // Laptop
-    joltages.sort();
+    joltages.sort_unstable();
     joltages
 }
