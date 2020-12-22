@@ -28,7 +28,7 @@ fn part1(player_1: &[u32], player_2: &[u32]) -> u32 {
     let mut player_1: VecDeque<u32> = player_1.iter().cloned().collect();
     let mut player_2: VecDeque<u32> = player_2.iter().cloned().collect();
 
-    while player_1.len() > 0 && player_2.len() > 0 {
+    while !player_1.is_empty() && !player_2.is_empty() {
         let top_1 = player_1.pop_front().unwrap();
         let top_2 = player_2.pop_front().unwrap();
 
@@ -41,7 +41,7 @@ fn part1(player_1: &[u32], player_2: &[u32]) -> u32 {
         }
     }
 
-    let mut winner = if player_1.len() > 0 {
+    let mut winner = if !player_1.is_empty() {
         player_1
     } else {
         player_2
@@ -79,7 +79,7 @@ fn recursive_combat(
     let mut player_1: VecDeque<u32> = player_1.collect();
     let mut player_2: VecDeque<u32> = player_2.collect();
 
-    while player_1.len() > 0 && player_2.len() > 0 {
+    while !player_1.is_empty() && !player_2.is_empty() {
         let state = (
             player_1.iter().copied().collect::<Vec<u32>>(),
             player_2.iter().copied().collect::<Vec<u32>>(),
@@ -122,7 +122,7 @@ fn recursive_combat(
         }
     }
 
-    if player_1.len() > 0 {
+    if !player_1.is_empty() {
         (Player::Player1, player_1)
     } else {
         (Player::Player2, player_2)

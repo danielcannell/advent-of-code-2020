@@ -1,22 +1,22 @@
-use std::collections::{HashSet, HashMap};
 use regex::Regex;
+use std::collections::{HashMap, HashSet};
 
 pub fn solve() {
     let input = include_str!("../input/day21");
     let foods = parse(input);
 
-    let mapping = determine_allergens(&foods);
+    let ingredient_to_allergen = map_ingredient_to_allergen(&foods);
 
-    println!("Part 1: {}", part1(&foods, &mapping));
-    println!("Part 2: {}", part2(&mapping));
+    println!("Part 1: {}", part1(&foods, &ingredient_to_allergen));
+    println!("Part 2: {}", part2(&ingredient_to_allergen));
 }
 
-fn part1(foods: &[Food], mapping: &HashMap<&str, &str>) -> u32 {
+fn part1(foods: &[Food], ingredient_to_allergen: &HashMap<&str, &str>) -> u32 {
     let mut count = 0;
 
     for f in foods {
         for ingredient in &f.ingredients {
-            if !mapping.contains_key(ingredient) {
+            if !ingredient_to_allergen.contains_key(ingredient) {
                 count += 1;
             }
         }
@@ -25,35 +25,33 @@ fn part1(foods: &[Food], mapping: &HashMap<&str, &str>) -> u32 {
     count
 }
 
-fn part2(mapping: &HashMap<&str, &str>) -> String {
-    let mut dangerous_list: Vec<&str> = mapping.keys().copied().collect();
-    dangerous_list.sort_by_key(|k| mapping[k]);
+fn part2(ingredient_to_allergen: &HashMap<&str, &str>) -> String {
+    let mut dangerous_list: Vec<&str> = ingredient_to_allergen.keys().copied().collect();
+    dangerous_list.sort_by_key(|k| ingredient_to_allergen[k]);
     dangerous_list.join(",")
 }
 
-// Return mapping from ingedient to allergen
-fn determine_allergens<'a>(foods: &[Food<'a>]) -> HashMap<&'a str, &'a str> {
-    let mut all_ingredients = HashSet::new();
-    let mut all_allergens = HashSet::new();
+fn map_ingredient_to_allergen<'a>(foods: &[Food<'a>]) -> HashMap<&'a str, &'a str> {
+    let mut remaining_ingredients = HashSet::new();
+    let mut remaining_allergens = HashSet::new();
 
     for f in foods {
         for &ingredient in &f.ingredients {
-            all_ingredients.insert(ingredient);
+            remaining_ingredients.insert(ingredient);
         }
 
         for &allergen in &f.allergens {
-            all_allergens.insert(allergen);
+            remaining_allergens.insert(allergen);
         }
     }
 
-    let mut foods = foods.to_vec();
-    let mut mapping = HashMap::new();
+    let mut ingredient_to_allergen = HashMap::new();
 
-    for _ in 0..all_allergens.len() {
-        for &allergen in &all_allergens {
-            let mut possible: HashSet<&str> = all_ingredients.clone();
+    while !remaining_allergens.is_empty() {
+        for allergen in remaining_allergens.clone() {
+            let mut possible: HashSet<&str> = remaining_ingredients.clone();
 
-            for f in &foods {
+            for f in foods {
                 if f.allergens.contains(&allergen) {
                     possible = possible.intersection(&f.ingredients).copied().collect();
                 }
@@ -61,18 +59,15 @@ fn determine_allergens<'a>(foods: &[Food<'a>]) -> HashMap<&'a str, &'a str> {
 
             if possible.len() == 1 {
                 let ingredient = possible.into_iter().next().unwrap();
+                remaining_ingredients.remove(ingredient);
+                remaining_allergens.remove(allergen);
 
-                mapping.insert(ingredient, allergen);
-
-                for f in &mut foods {
-                    f.ingredients.remove(&ingredient);
-                    f.allergens.remove(&allergen);
-                }
+                ingredient_to_allergen.insert(ingredient, allergen);
             }
         }
     }
 
-    mapping
+    ingredient_to_allergen
 }
 
 fn parse(input: &str) -> Vec<Food> {
