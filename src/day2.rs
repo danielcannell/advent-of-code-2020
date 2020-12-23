@@ -1,16 +1,7 @@
-use fromstr_derive::FromStr;
-
-#[derive(Debug, FromStr)]
-#[regex(r"(?P<min>\d+)-(?P<max>\d+) (?P<letter>[a-z]): (?P<password>[a-z]+)")]
-struct Password {
-    // Password policy
-    min: usize,
-    max: usize,
-    letter: char,
-
-    // The password
-    password: String,
-}
+use anyhow::Error;
+use std::str::FromStr;
+use regex::Regex;
+use lazy_static::lazy_static;
 
 pub fn solve() {
     let input: Vec<Password> = include_str!("../input/day2")
@@ -52,4 +43,34 @@ fn part2(passwords: &[Password]) -> u32 {
     }
 
     valid_count
+}
+
+struct Password {
+    // Password policy
+    min: usize,
+    max: usize,
+    letter: char,
+
+    // The password
+    password: String,
+}
+
+impl FromStr for Password {
+    type Err = Error;
+
+    fn from_str(s: &str) -> Result<Password, Error> {
+        lazy_static! {
+            static ref RE: Regex = Regex::new(r"^(\d+)-(\d+) ([a-z]): ([a-z]+)$").unwrap();
+        }
+
+        let caps = RE.captures(s).unwrap();
+        let min = caps.get(1).unwrap().as_str().parse()?;
+        let max = caps.get(2).unwrap().as_str().parse()?;
+        let letter = caps.get(3).unwrap().as_str().parse()?;
+        let password = caps.get(4).unwrap().as_str().to_string();
+
+        Ok(Password {
+            min, max, letter, password
+        })
+    }
 }
