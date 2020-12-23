@@ -1,5 +1,5 @@
-use anyhow::{bail, Result};
-use clap::{App, Arg};
+use std::env;
+use std::process::exit;
 
 mod day1;
 mod day10;
@@ -25,13 +25,27 @@ mod day7;
 mod day8;
 mod day9;
 
-fn main() -> Result<()> {
-    let matches = App::new("advent-of-code-2020")
-        .arg(Arg::with_name("day").required(true))
-        .get_matches();
+fn main() {
+    let args: Vec<String> = env::args().collect();
 
-    let day_str = matches.value_of("day").unwrap();
-    let day: u32 = day_str.parse()?;
+    if args.len() != 2 {
+        eprintln!("Error: incorrect number of arguments");
+        eprintln!();
+        eprintln!("Usage:");
+        eprintln!("    advent-of-code-2020 <day>");
+        exit(1);
+    }
+
+    if args[1] == "--help" || args[1] == "-h" {
+        println!("Usage:");
+        println!("    advent-of-code-2020 <day>");
+        return;
+    }
+
+    let day: u32 = args[1].parse().unwrap_or_else(|_| {
+        eprintln!("Invalid day");
+        exit(1);
+    });
 
     match day {
         1 => day1::solve(),
@@ -57,8 +71,10 @@ fn main() -> Result<()> {
         21 => day21::solve(),
         22 => day22::solve(),
         23 => day23::solve(),
-        _ => bail!("I haven't solved that day yet!"),
-    };
 
-    Ok(())
+        _ => {
+            eprintln!("I haven't solved that day yet!");
+            exit(1);
+        }
+    };
 }
