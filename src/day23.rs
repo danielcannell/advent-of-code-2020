@@ -10,13 +10,13 @@ pub fn solve() {
 }
 
 fn part1(input: &[u32]) -> u32 {
-    let mut ring = Ring::new(input);
+    let mut ring = Ring::new(input, input.len() as u32);
     ring.play(100);
     ring.part1_result()
 }
 
 fn part2(input: &[u32]) -> u64 {
-    let mut ring = Ring::with_extra(input, 1_000_000);
+    let mut ring = Ring::new(input, 1_000_000);
     ring.play(10_000_000);
     ring.part2_result()
 }
@@ -28,36 +28,17 @@ struct Ring {
 }
 
 impl Ring {
-    fn new(cups: &[u32]) -> Ring {
-        let mut ring = Ring {
-            current: cups[0],
-            next: vec![0; cups.len() + 1],
-        };
-
-        for i in 0..cups.len() {
-            ring.set_next(cups[i], cups[(i + 1) % cups.len()]);
-        }
-
-        ring
-    }
-
-    fn with_extra(cups: &[u32], limit: u32) -> Ring {
+    fn new(cups: &[u32], limit: u32) -> Ring {
         let mut ring = Ring {
             current: cups[0],
             next: vec![0; limit as usize + 1],
         };
 
-        for i in 1..limit {
-            ring.set_next(i, i + 1);
+        let elem = |i| cups.get(i as usize).copied().unwrap_or(i + 1);
+
+        for i in 0..limit {
+            ring.set_next(elem(i), elem((i + 1) % limit));
         }
-
-        ring.set_next(limit, ring.current);
-
-        for i in 0..(cups.len() - 1) {
-            ring.set_next(cups[i], cups[i + 1]);
-        }
-
-        ring.set_next(cups[cups.len() - 1], cups.len() as u32 + 1);
 
         ring
     }
