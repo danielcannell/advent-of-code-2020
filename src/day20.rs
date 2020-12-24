@@ -31,9 +31,7 @@ fn part2(tiles: &[Tile]) -> u64 {
         }
     }
 
-    let is_edge = |border| {
-        border_to_tile_map[&border].len() == 1
-    };
+    let is_edge = |border| border_to_tile_map[&border].len() == 1;
 
     let mut grid = Vec::new();
     let mut row = Vec::new();
@@ -86,7 +84,8 @@ fn part2(tiles: &[Tile]) -> u64 {
             }
         }
 
-        let mut piece = TransformedTile::from_tile(piece.expect("Could not find connecting piece").clone());
+        let mut piece =
+            TransformedTile::from_tile(piece.expect("Could not find connecting piece").clone());
 
         while piece.left_border() != border {
             piece.rotate();
@@ -120,7 +119,8 @@ fn part2(tiles: &[Tile]) -> u64 {
                 }
             }
 
-            let mut piece = TransformedTile::from_tile(piece.expect("Could not find connecting piece").clone());
+            let mut piece =
+                TransformedTile::from_tile(piece.expect("Could not find connecting piece").clone());
 
             while piece.top_border() != border {
                 piece.rotate();
@@ -167,8 +167,8 @@ fn part2(tiles: &[Tile]) -> u64 {
 
     let mut image = vec![vec![false; 8 * SIZE_TILES]; 8 * SIZE_TILES];
 
-    for r in 0..(8*SIZE_TILES) {
-        for c in 0..(8*SIZE_TILES) {
+    for r in 0..(8 * SIZE_TILES) {
+        for c in 0..(8 * SIZE_TILES) {
             image[r][c] = grid[r / 8][c / 8].sample(r % 8, c % 8);
         }
     }
@@ -184,8 +184,20 @@ fn part2(tiles: &[Tile]) -> u64 {
 
     let monster = vec![
         (0, 18),
-        (1, 0), (1, 5), (1, 6), (1, 11), (1, 12), (1, 17), (1, 18), (1, 19),
-        (2, 1), (2, 4), (2, 7), (2, 10), (2, 13), (2, 16)
+        (1, 0),
+        (1, 5),
+        (1, 6),
+        (1, 11),
+        (1, 12),
+        (1, 17),
+        (1, 18),
+        (1, 19),
+        (2, 1),
+        (2, 4),
+        (2, 7),
+        (2, 10),
+        (2, 13),
+        (2, 16),
     ];
 
     for &flipped in &[true, false] {
@@ -334,11 +346,7 @@ impl FromStr for Tile {
             }
         }
 
-        Ok(Tile {
-            id,
-            borders,
-            image,
-        })
+        Ok(Tile { id, borders, image })
     }
 }
 
@@ -352,7 +360,9 @@ struct TransformedTile {
 impl TransformedTile {
     fn from_tile(tile: Tile) -> TransformedTile {
         TransformedTile {
-            tile, flipped: false, rotation: 0,
+            tile,
+            flipped: false,
+            rotation: 0,
         }
     }
 
@@ -426,8 +436,9 @@ fn test_transforms() {
 ##..#....#
 #....#....
 ##.###.#..
-..#.#.#.#.".parse().unwrap();
-
+..#.#.#.#."
+        .parse()
+        .unwrap();
 
     let mut tt = TransformedTile::from_tile(tile);
 

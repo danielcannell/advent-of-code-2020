@@ -1,7 +1,7 @@
 use anyhow::Error;
-use std::str::FromStr;
-use regex::Regex;
 use lazy_static::lazy_static;
+use regex::Regex;
+use std::str::FromStr;
 
 pub fn solve() {
     let input: Vec<Password> = include_str!("../input/day2")
@@ -70,7 +70,10 @@ impl FromStr for Password {
         let password = caps.get(4).unwrap().as_str().to_string();
 
         Ok(Password {
-            min, max, letter, password
+            min,
+            max,
+            letter,
+            password,
         })
     }
 }
