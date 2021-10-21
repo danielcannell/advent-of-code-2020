@@ -39,22 +39,21 @@ fn part2(rules: &HashMap<u32, Rule>, messages: &[&str]) -> u32 {
         let rule42 = &rules[&42];
         let rule31 = &rules[&31];
 
-        for n in 2..10 {
-            for m in 1..n {
-                let mut pos = 0;
-                let mut ok = true;
+        let mut pos = 0;
 
-                for _ in 0..n {
-                    ok = ok && is_match_impl(&message, rule42, &mut pos, rules);
+        for n in 1.. {
+            if !is_match_impl(&message, rule42, &mut pos, rules) {
+                break;
+            }
+
+            let mut pos = pos;
+
+            for _ in 1..n {
+                if !is_match_impl(&message, rule31, &mut pos, rules) {
+                    break;
                 }
 
-                for _ in 0..m {
-                    ok = ok && is_match_impl(&message, rule31, &mut pos, rules);
-                }
-
-                ok = ok && pos == message.len();
-
-                if ok {
+                if pos == message.len() {
                     count += 1;
                 }
             }
@@ -103,36 +102,33 @@ fn is_match_impl(
         return false;
     }
 
-    match rule {
+    let start_pos = *pos;
+
+    let m = match rule {
         Rule::Literal(lit) => {
-            if message[*pos] == *lit {
-                *pos += 1;
-                true
-            } else {
-                false
-            }
+            *pos += 1;
+            message[*pos - 1] == *lit
         }
 
         Rule::Ref(r) => is_match_impl(message, &rules[r], pos, rules),
 
         Rule::Concatenation(lhs, rhs) => {
-            let p = *pos;
-
             let m1 = is_match_impl(message, lhs, pos, rules);
             let m2 = is_match_impl(message, rhs, pos, rules);
-
-            if m1 && m2 {
-                true
-            } else {
-                *pos = p;
-                false
-            }
+            m1 && m2
         }
 
         Rule::Alternation(lhs, rhs) => {
             is_match_impl(message, lhs, pos, rules) || is_match_impl(message, rhs, pos, rules)
         }
+    };
+
+    if !m {
+        // Backtrack
+        *pos = start_pos;
     }
+
+    m
 }
 
 #[derive(Debug)]
